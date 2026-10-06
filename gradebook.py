@@ -5,6 +5,8 @@ import http.server
 import json
 import logging
 import sys
+from collections.abc import Callable
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -12,10 +14,10 @@ from errors import ConflictError, NotFoundError, ValidationError
 from models import parse_assessment, parse_mark, parse_student
 
 DATA = "gradebook.json"
-STATE = {}
+STATE: dict[str, Any] = {"students": {}, "assessments": {}, "marks": []}
 
 
-def load():
+def load() -> None:
     global STATE
     try:
         with open(DATA) as f:
@@ -24,14 +26,14 @@ def load():
         STATE = {"students": {}, "assessments": {}, "marks": []}
 
 
-def save():
+def save() -> None:
     with open(DATA, "w") as f:
         json.dump(STATE, f)
 
 
-def pct(sid):
-    total = 0
-    got = 0
+def pct(sid: str) -> str:
+    total = 0.0
+    got = 0.0
     for m in STATE["marks"]:
         if m["student"] == sid:
             a = STATE["assessments"].get(m["assessment"])
@@ -44,10 +46,10 @@ def pct(sid):
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
-    def log_message(self, *args):
+    def log_message(self, *args: object) -> None:
         pass
 
-    def _send(self, code, obj):
+    def _send(self, code: int, obj: object) -> None:
         body = json.dumps(obj).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
@@ -55,7 +57,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _handle(self, method):
+    def _handle(self, method: Callable[[], tuple[int, object]]) -> None:
         try:
             status, body = method()
         except ValidationError as e:
@@ -70,10 +72,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         else:
             self._send(status, body)
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         self._handle(self._get)
 
-    def _get(self):
+    def _get(self) -> tuple[int, object]:
         if self.path == "/students":
             return 200, list(STATE["students"].values())
 
@@ -106,10 +108,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
         raise NotFoundError("not found")
 
-    def do_POST(self):
+    def do_POST(self) -> None:
         self._handle(self._post)
 
-    def _post(self):
+    def _post(self) -> tuple[int, object]:
         n = int(self.headers.get("Content-Length", 0))
         raw = self.rfile.read(n)
 
@@ -182,12 +184,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
         raise NotFoundError("not found")
 
-def main(argv=sys.argv):
+def main(argv: list[str] = sys.argv) -> None:
     load()
     port = 8000
+
     if len(argv) > 1:
-        port = int(argv[1])
-    print("gradebook on " + str(port))
+        try:
+            port = int(argv[1])
+        except ValueError:
+            raise SystemExit("port must be a whole number from 1 to 65535")
+
+        if port < 1 or port > 65535:
+            raise SystemExit("port must be a whole number from 1 to 65535")
+
+    logger.info("gradebook on %s", port)
     http.server.HTTPServer(("", port), Handler).serve_forever()
 
 
