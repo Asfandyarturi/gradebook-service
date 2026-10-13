@@ -1,0 +1,18 @@
+import pytest
+import gradebook
+
+@pytest.fixture
+def state():
+    return {
+        "students": {"2430-0129": {"id": "2430-0129", "name": "Asfandyar Ali Turi"}},
+        "assessments": {
+            "A1": {"id": "A1", "title": "Quiz 1", "weight": 10, "total": 20},
+            "A2": {"id": "A2", "title": "Midterm", "weight": 30, "total": 50},
+        },
+        "marks": [],
+    }
+
+@pytest.fixture
+def loaded(state, monkeypatch):
+    monkeypatch.setattr(gradebook, "STATE", state)
+    return state
