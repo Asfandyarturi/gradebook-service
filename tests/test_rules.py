@@ -10,3 +10,7 @@ def test_empty_weights_fits():
 def test_exceeds_max_weight_raises():
     with pytest.raises(ValidationError, match="100"):
         ensure_weight_fits([60], 50)
+
+
+def test_exact_limit_fits():
+    ensure_weight_fits([60], 40)
