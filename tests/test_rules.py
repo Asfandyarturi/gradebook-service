@@ -1,5 +1,6 @@
 import pytest
 from errors import ValidationError
+
 from rules import ensure_weight_fits
 
 

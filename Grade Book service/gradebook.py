@@ -3,7 +3,8 @@ import http.server
 import json
 import logging
 import sys
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from errors import ConflictError, NotFoundError, ValidationError
 from models import Mark, parse_assessment, parse_mark, parse_student
@@ -43,7 +44,7 @@ def pct(sid: str) -> str:
 
 
 def now() -> str:
-    return str(datetime.datetime.now(datetime.timezone.utc))
+    return str(datetime.datetime.now(datetime.UTC))
 
 
 def add_mark(
@@ -159,7 +160,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             STATE["students"][student.id] = {
                 "id": student.id,
                 "name": student.name,
-                "joined": str(datetime.datetime.now(datetime.timezone.utc)),
+                "joined": str(datetime.datetime.now(datetime.UTC)),
             }
 
             save()

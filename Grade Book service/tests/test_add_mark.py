@@ -1,8 +1,10 @@
 from unittest.mock import Mock
+
 import pytest
 from errors import NotFoundError, ValidationError
 from gradebook import add_mark
 from models import Mark
+
 
 def fixed_now() -> str:
     return "2026-10-12 09:00:00"

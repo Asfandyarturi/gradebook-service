@@ -1,6 +1,8 @@
 import json
-import pytest
+
 import gradebook
+import pytest
+
 
 @pytest.fixture
 def data_file(tmp_path, monkeypatch):

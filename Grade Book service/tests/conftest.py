@@ -1,5 +1,6 @@
-import pytest
 import gradebook
+import pytest
+
 
 @pytest.fixture
 def state():
