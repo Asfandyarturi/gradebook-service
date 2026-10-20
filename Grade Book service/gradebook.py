@@ -1,5 +1,3 @@
-from errors import ConflictError
-from rules import ensure_weight_fits
 import datetime
 import http.server
 import json
@@ -10,6 +8,8 @@ from typing import Any
 
 from errors import ConflictError, NotFoundError, ValidationError
 from models import Mark, parse_assessment, parse_mark, parse_student
+
+from rules import ensure_weight_fits
 
 logger = logging.getLogger(__name__)
 

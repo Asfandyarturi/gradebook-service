@@ -1,6 +1,8 @@
 import pytest
-from hypothesis import given, strategies as st
 from errors import ValidationError
+from hypothesis import given
+from hypothesis import strategies as st
+
 from rules import MAX_TOTAL_WEIGHT, TOLERANCE, ensure_weight_fits
 
 
