@@ -8,3 +8,5 @@ Cycle 4 failure: Total weight cannot exceed 100 due to float representation 100.
 - What coverage told us: Coverage identified which lines and decision branches executed during test runs.
 - What coverage could not tell us: Coverage could not verify whether assertions were present or whether the output behavior was correct.
 - Untested function in gradebook.py: load_state
+## Task 6 Boundary Value Testing
+- Mutation finding: Changing > to >= in add_mark caused test_add_mark_score_boundaries[20-True] to fail.
