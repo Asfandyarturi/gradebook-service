@@ -1,3 +1,5 @@
+from errors import ConflictError
+from rules import ensure_weight_fits
 import datetime
 import http.server
 import json
@@ -27,7 +29,19 @@ def load() -> None:
 def save() -> None:
     with open(DATA, "w") as f:
         json.dump(STATE, f)
+        
+def add_assessment(state, assessment, save):
+    if "assessments" not in state:
+        state["assessments"] = {}
 
+    if assessment["id"] in state["assessments"]:
+        raise ConflictError(f"Assessment {assessment['id']} already exists")
+
+    existing_weights = [a["weight"] for a in state["assessments"].values()]
+    ensure_weight_fits(existing_weights, assessment["weight"])
+
+    state["assessments"][assessment["id"]] = assessment
+    save()
 
 def pct(sid: str) -> str:
     total = 0.0
