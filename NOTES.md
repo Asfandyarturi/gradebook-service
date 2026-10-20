@@ -10,3 +10,6 @@ Cycle 4 failure: Total weight cannot exceed 100 due to float representation 100.
 - Untested function in gradebook.py: load_state
 ## Task 6 Boundary Value Testing
 - Mutation finding: Changing > to >= in add_mark caused test_add_mark_score_boundaries[20-True] to fail.
+## Task 7 Property-Based Testing
+- Properties verified: Valid sums (<= 100) never raise ValidationError; sums exceeding 100 + tolerance always raise ValidationError.
+- Hypothesis value: Automatically generates edge cases (e.g., extremely tiny floating point decimals, zero weights) across hundreds of iterations.
