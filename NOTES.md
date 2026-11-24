@@ -24,3 +24,18 @@ Cycle 4 failure: Total weight cannot exceed 100 due to float representation 100.
 | A | To be investigated | Pending | Pending |
 | B | To be investigated | Pending | Pending |
 | C | To be investigated | Pending | Pending |
+## Task 3: Find Bug A with Git Bisect
+
+First bad commit:
+983a7f22b0dc62ecd66484b0e510839de8700c30
+
+Commit message:
+Task 2 step 3 update student id extraction
+
+Rounds needed:
+2
+
+Cause:
+The change from self.path.split("/")[2] to
+self.path.removeprefix("/students/") caused trailing
+slashes and query strings to become part of the student ID.
