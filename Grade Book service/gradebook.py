@@ -214,7 +214,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 def main(argv: list[str] = sys.argv) -> None:
     load()
-    port = 8000
+    port = DEFAULT_PORT
 
     if len(argv) > 1:
         try:
