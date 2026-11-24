@@ -18,3 +18,9 @@ Cycle 4 failure: Total weight cannot exceed 100 due to float representation 100.
 - All tests passing: Yes (39 tests)
 - Code quality checks: mypy --strict passed, ruff check passed
 - Clean workspace verified.
+## Lab 06 — Debugging and Regression Tests
+| Bug | Cause | Fix | Test |
+|---|---|---|---|
+| A | To be investigated | Pending | Pending |
+| B | To be investigated | Pending | Pending |
+| C | To be investigated | Pending | Pending |
