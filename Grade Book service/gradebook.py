@@ -44,6 +44,7 @@ def add_assessment(state, assessment, save):
     save()
 
 def pct(sid: str) -> str:
+    """Calculate the percentage of a student."""
     total = 0.0
     got = 0.0
     for m in STATE["marks"]:
