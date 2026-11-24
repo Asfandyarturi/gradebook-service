@@ -157,7 +157,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self._handle(self._post)
 
     def _post(self) -> tuple[int, object]:
-        n = int(self.headers.get("Content-Length", 0))
+        length = int(self.headers.get("Content-Length", 0))
         raw = self.rfile.read(n)
 
         try:
