@@ -74,7 +74,8 @@ def add_mark(
 
     if mark.assessment not in state["assessments"]:
         raise NotFoundError("assessment not found")
-
+    
+    # All checks come first, so a rejected mark leaves no trace.
     assessment = state["assessments"][mark.assessment]
 
     if mark.score > float(assessment["total"]):
