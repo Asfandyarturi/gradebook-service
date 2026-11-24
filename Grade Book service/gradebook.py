@@ -6,14 +6,15 @@ import sys
 from collections.abc import Callable
 from typing import Any
 
+from rules import ensure_weight_fits
+
 from errors import ConflictError, NotFoundError, ValidationError
 from models import Mark, parse_assessment, parse_mark, parse_student
-
-from rules import ensure_weight_fits
 
 logger = logging.getLogger(__name__)
 
 DATA = "gradebook.json"
+DEFAULT_PORT = 8000
 STATE: dict[str, Any] = {"students": {}, "assessments": {}, "marks": []}
 
 
@@ -41,7 +42,13 @@ def add_assessment(state, assessment, save):
     ensure_weight_fits(existing_weights, assessment["weight"])
 
     state["assessments"][assessment["id"]] = assessment
-    save()
+
+    try:
+        save()
+    except OSError:
+        del state["assessments"][assessment["id"]]
+        logger.warning("Failed to save assessment %s", assessment["id"])
+        raise
 
 def pct(sid: str) -> str:
     """Calculate the percentage of a student."""
@@ -160,7 +167,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def _post(self) -> tuple[int, object]:
         length = int(self.headers.get("Content-Length", 0))
-        raw = self.rfile.read(n)
+        raw = self.rfile.read(length)
 
         try:
             d = json.loads(raw)

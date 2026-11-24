@@ -1,5 +1,6 @@
-import gradebook
 import pytest
+
+import gradebook
 
 
 @pytest.mark.parametrize(

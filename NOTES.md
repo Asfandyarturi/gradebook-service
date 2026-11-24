@@ -24,7 +24,7 @@ Cycle 4 failure: Total weight cannot exceed 100 due to float representation 100.
 | A | To be investigated | Pending | Pending |
 | B | To be investigated | Pending | Pending |
 | C | To be investigated | Pending | Pending |
-## Task 3: Find Bug A with Git Bisect
+Task 3: Find Bug A with Git Bisect
 
 First bad commit:
 983a7f22b0dc62ecd66484b0e510839de8700c30
@@ -39,3 +39,39 @@ Cause:
 The change from self.path.split("/")[2] to
 self.path.removeprefix("/students/") caused trailing
 slashes and query strings to become part of the student ID.
+## Task 4: Fix Bug A
+
+Added tests for:
+- GET /students/S1
+- GET /students/S1/
+- GET /students/S1?format=json
+- GET /students/NOPE/
+
+Fix:
+Updated student ID extraction in _get to remove query strings
+and trailing slashes.
+
+Test results:
+27 passed.
+## Task 5: Reproduce Bug B
+
+Steps:
+1. Created assessment A1 (weight 10, total 20).
+2. Changed gradebook.json permissions to read-only using chmod 444.
+3. Posted assessment A2 (weight 40, total 100).
+4. Received HTTP 500 Internal Server Error.
+
+Last traceback line:
+PermissionError: [Errno 13] Permission denied: 'gradebook.json'
+
+Code location:
+gradebook.py, line 31:
+with open(DATA, "w") as f:
+
+After changing permissions back using chmod 644,
+posted A2 again and received HTTP 409 Conflict:
+assessment already exists.
+
+Cause:
+The assessment was added to memory before saving.
+When saving failed, the assessment remained in memory.

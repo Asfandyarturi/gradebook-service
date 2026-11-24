@@ -1,7 +1,8 @@
 import json
 
-import gradebook
 import pytest
+
+import gradebook
 
 
 @pytest.fixture

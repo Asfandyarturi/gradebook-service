@@ -1,4 +1,5 @@
 import pytest
+
 from errors import ValidationError
 from models import parse_number
 
